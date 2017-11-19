@@ -1,0 +1,1 @@
+dotnet publish -c Release ./WebApplication1.csproj -o ../release/

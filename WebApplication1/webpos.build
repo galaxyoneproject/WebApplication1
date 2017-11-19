@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<project name="app" default="debug">
+ <property name="release.dir" value="release" />
+ <property name="stage.dir" value="stage" /> 
+ <property name="solution.config" value="debug" />
+ <property name="src.dir" value="${project::get-base-directory()}" />
+
+  <target name="release">
+  <property name="solution.config" value="debug" />
+  <property name="output.dir" value="${release.dir}" />
+  <call target="app" />
+ </target>
+
+ <target name="debug">
+  <property name="solution.config" value="release" />
+  <property name="output.dir" value="${stage.dir}" />
+  <call target="app" />
+ </target>
+ 
+<target name="clean">
+	<delete dir="${output.dir}" />
+</target>
+ 
+<target name="build" depends="clean">
+  <solution configuration="${config}"
+			solutionfile="WebApplication1.sln"
+			outputdir="${output.dir}" />
+</target>
+
+<target name="publish" depends="clean">
+	<property 
+		name="publishFolderParameter" 
+		value="/p:PublishDir=${output.dir}" />
+	<echo message="Building..." />   
+	<exec program="publish.cmd" workingdir="." verbose="true">
+		<!--
+		<arg value="${projectFile}" />
+		<arg value="/target:Clean;Publish" />
+		<arg value="${publishFolderParameter}" />
+		<arg value="/property:ApplicationVersion=${version}" />
+		<arg value="/property:PublisherName=&quot;${publisherName}&quot;" />
+		-->
+	</exec>
+	<echo message="Built" />	
+</target>
+
+<target name="app">
+ 	<property name="solution.config" value="release" />
+ 	<call target="publish" />
+ </target>
+   
+</project>
